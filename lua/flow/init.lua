@@ -35,31 +35,6 @@ local function handle_md_file(lines)
   run(block.lang, block.code)
 end
 
-local function run_block()
-  local lines = extract.lines_from_current_buffer()
-
-  if vim.bo.filetype ~= "markdown" then
-    print("flow: sorry! currently RunCodeBlock is only supported in markdown")
-    return
-  end
-
-  handle_md_file(lines)
-end
-
-local function run_range(range)
-  local lines = extract.lines_in_range(range)
-  local code = table.concat(lines, "\n")
-
-  run(vim.bo.filetype, code)
-end
-
-local function run_file()
-  local lines = extract.lines_from_current_buffer()
-  local code = table.concat(lines, "\n")
-
-  run(vim.bo.filetype, code)
-end
-
 local function run_custom_cmd(suffix)
   if suffix == nil then
     print("flow: you need to provide an alias for the custom command (example: :RunCodeCustomCmd 1)")
@@ -85,19 +60,6 @@ local function show_last_output()
   output.show_last_output(setup_options.output)
 end
 
-local function reload_plugin()
-  package.loaded['flow'] = nil
-  print "reloaded flow"
-end
-
-local function run_quick_cmd()
-  local v = vars.vars_to_export()
-  windows.open_quick_cmd_window(function(quick_cmd)
-    local cmd_with_vars = v .. "; " .. quick_cmd
-    output.handle_output(cmd_with_vars, setup_options.output)
-  end)
-end
-
 local function setup(options)
   setup_options = options
 
@@ -107,13 +69,8 @@ local function setup(options)
 end
 
 return {
-  run_block = run_block,
-  run_range = run_range,
-  run_file = run_file,
   run_custom_cmd = run_custom_cmd,
   run_last_custom_cmd = run_last_custom_cmd,
-  run_quick_cmd = run_quick_cmd,
   show_last_output = show_last_output,
-  reload_plugin = reload_plugin,
   setup = setup
 }

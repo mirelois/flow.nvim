@@ -4,10 +4,6 @@ if vim.g.loaded_flow then
 end
 
 -- Commands
-vim.api.nvim_create_user_command('FlowRunFile', function()
-  require('flow').run_file()
-end, {})
-
 vim.api.nvim_create_user_command('FlowSetCustomCmd', function(opts)
   require('flow.cmd').set_custom_cmd(opts.args)
 end, { nargs = '?' })
@@ -34,14 +30,6 @@ end, {})
 
 vim.api.nvim_create_user_command('FlowLastOutput', function()
   require('flow').show_last_output()
-end, {})
-
-vim.api.nvim_create_user_command('FlowRunMDBlock', function()
-  require('flow').run_block()
-end, {})
-
-vim.api.nvim_create_user_command('FlowRunQuickCmd', function()
-  require('flow').run_quick_cmd()
 end, {})
 
 -- Autocommand

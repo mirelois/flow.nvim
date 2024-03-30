@@ -11,17 +11,6 @@ local custom_command_win = nil
 local custom_command_buf = nil
 local last_custom_cmd = nil
 
-local filetype_cmd_map = {
-  lua = "lua <<-EOF\n%s\nEOF",
-  python = "python <<-EOF\n%s\nEOF",
-  ruby = "ruby <<-EOF\n%s\nEOF",
-  bash = "bash <<-EOF\n%s\nEOF",
-  sh = "sh <<-EOF\n%s\nEOF",
-  scheme = "scheme <<-EOF\n%s\nEOF",
-  javascript = "node <<-EOF\n%s\nEOF",
-  go = "go run .",
-}
-
 -- set_custom_cmd opens a small buffer that allows the user to edit the custom
 -- command
 local function set_custom_cmd(suffix)
@@ -45,28 +34,6 @@ local function close_custom_cmd_win()
     vim.api.nvim_buf_delete(custom_command_buf, {})
     custom_command_buf = nil
   end
-end
-
--- constructs a command in the following format:
---
--- <binary to run> <output_file> <<-EOF
---    <code>
--- EOF
---
-local function cmd(lang, code)
-  if lang == "sql" then
-    return sql.cmd(code)
-  end
-
-  local cmd_tmpl = filetype_cmd_map[lang]
-  if cmd_tmpl == nil then
-    print(string.format(
-      "flow: the language '%s' doesn't seem to be supported yet", lang
-    ))
-    return nil
-  end
-
-  return string.format(cmd_tmpl, code)
 end
 
 local function custom_cmd(suffix)
@@ -103,16 +70,6 @@ local function get_last_custom_cmd()
   return last_custom_cmd
 end
 
-local function override_cmd_map(cmd_map)
-  if cmd_map == nil then
-    return
-  end
-
-  for filetype, command in pairs(cmd_map) do
-    filetype_cmd_map[filetype] = command
-  end
-end
-
 local function override_custom_cmd_dir(dir)
   if dir == nil then
     return
@@ -126,13 +83,11 @@ local function override_custom_cmd_dir(dir)
 end
 
 return {
-  cmd = cmd,
   custom_cmd = custom_cmd,
   set_custom_cmd = set_custom_cmd,
   close_custom_cmd_win = close_custom_cmd_win,
   get_custom_cmds = get_custom_cmds,
   get_last_custom_cmd = get_last_custom_cmd,
   delete_custom_cmd = delete_custom_cmd,
-  override_cmd_map = override_cmd_map,
   override_custom_cmd_dir = override_custom_cmd_dir,
 }
