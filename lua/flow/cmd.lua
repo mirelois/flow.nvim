@@ -1,15 +1,19 @@
 local vars = require('flow.vars')
-local sql = require('flow.sql')
 local windows = require('flow.windows')
 
 local DATA_DIR = vim.fn.stdpath("data")
-local CUSTOM_CMD_FILE = DATA_DIR .. "/" .. "run_code_custom_cmd_%s"
+local CUSTOM_CMD_FILE = DATA_DIR .. "/"
 
 local custom_command_filetype = 'bash'
 local custom_command_default_split = '10split'
 local custom_command_win = nil
 local custom_command_buf = nil
 local last_custom_cmd = nil
+
+-- set DATA_DIR to set directory
+local function set_data_dir(dir)
+    DATA_DIR = dir
+end
 
 -- set_custom_cmd opens a small buffer that allows the user to edit the custom
 -- command
