@@ -12,14 +12,6 @@ vim.api.nvim_create_user_command('FlowRunCustomCmd', function(opts)
   require('flow').run_custom_cmd(opts.args)
 end, { nargs = '?' })
 
-vim.api.nvim_create_user_command('FlowReload', function()
-  require('flow').reload_plugin()
-end, {})
-
-vim.api.nvim_create_user_command('FlowRunSelected', function(opts)
-  require('flow').run_range({opts.line1, opts.line2})
-end, { nargs = '*', range = true })
-
 vim.api.nvim_create_user_command('FlowLauncher', function()
   require('flow.telescope').custom_cmds()
 end, {})
